@@ -30,7 +30,7 @@ RUN mkdir data logs && \
     find {{ beat_home }} -type d -exec chmod 0750 {} \; && \
     find {{ beat_home }} -type f -exec chmod 0640 {} \; && \
     chmod 0750 {{ binary_file }} && \
-    {%- if beat == 'filebeat' or beat == 'metricbeat' %}
+    {%- if beat == 'metricbeat' %}
     chmod 0770 modules.d && \
     {% endif %}
     chmod 0770 data logs
@@ -41,7 +41,7 @@ RUN setcap cap_net_raw,cap_net_admin=eip {{ binary_file }}
 {%- if beat == 'heartbeat' %}
 RUN setcap cap_net_raw=eip {{ binary_file }}
 {% endif %}
-{%- if beat == 'auditbeat' %}
+{%- if beat == 'auditbeat' or beat == 'filebeat' %}
 USER root
 {% else %}
 USER {{ beat }}
